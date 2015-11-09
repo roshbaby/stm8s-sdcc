@@ -6,7 +6,7 @@
 		<Option pch_mode="2" />
 		<Option compiler="sdcc" />
 		<Build>
-			<Target title="Release">
+			<Target title="STM8_lib">
 				<Option output="lib/$(TARGET_NAME).lib" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output="obj/" />
