@@ -2774,6 +2774,11 @@ CFG_TypeDef;
  #define INTERRUPT_HANDLER_TRAP(a) void a(void) trap
 #endif /* _RAISONANCE_ */
 
+#ifdef _SDCC_
+  #define INTERRUPT_HANDLER(a,b) void a(void) __interrupt(b)
+  #define INTERRUPT_HANDLER_TRAP(a) void a(void) __interrupt(0)
+#endif /* _SDCC_ */
+
 #ifdef _IAR_
  #define STRINGVECTOR(x) #x
  #define VECTOR_ID(x) STRINGVECTOR( vector = (x) )
