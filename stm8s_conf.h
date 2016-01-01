@@ -1,21 +1,27 @@
 /**
   ******************************************************************************
-  * @file     stm8s_conf.h
-  * @author   MCD Application Team
-  * @version  V2.1.0
-  * @date     18-November-2011
-  * @brief    This file is used to configure the Library.
-  ******************************************************************************
+  * @file    stm8s_conf.h
+  * @author  MCD Application Team
+  * @version V2.2.0
+  * @date    30-September-2014
+  * @brief   This file is used to configure the Library.
+   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
   */
 
@@ -28,9 +34,9 @@
 
 /* Uncomment the line below to enable peripheral header file inclusion */
 #if defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) ||\
-    defined(STM8S903) || defined (STM8AF626x)
+    defined(STM8S903) || defined (STM8AF626x) || defined (STM8AF622x)
 #include "stm8s_adc1.h"
-#endif /* (STM8S105) ||(STM8S103) || (STM8S903) || STM8AF626x*/
+#endif /* (STM8S105) ||(STM8S103) || (STM8S903) || (STM8AF626x) || (STM8AF622x) */
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) || defined (STM8AF52Ax) ||\
     defined (STM8AF62Ax)
  #include "stm8s_adc2.h"
@@ -39,7 +45,7 @@
 #include "stm8s_beep.h"
 #if defined (STM8S208) || defined (STM8AF52Ax)
  #include "stm8s_can.h"
-#endif /* STM8S208 || STM8AF52Ax */
+#endif /* (STM8S208) || (STM8AF52Ax) */
 #include "stm8s_clk.h"
 #include "stm8s_exti.h"
 #include "stm8s_flash.h"
@@ -50,38 +56,41 @@
 #include "stm8s_rst.h"
 #include "stm8s_spi.h"
 #include "stm8s_tim1.h"
-#ifndef STM8S903
+#if !defined(STM8S903) || !defined(STM8AF622x)
  #include "stm8s_tim2.h"
-#endif /* STM8S903 */
+#endif /* (STM8S903) || (STM8AF622x) */
 #if defined(STM8S208) || defined(STM8S207) || defined(STM8S007) ||defined(STM8S105) ||\
     defined(STM8S005) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8AF626x)
  #include "stm8s_tim3.h"
 #endif /* (STM8S208) ||defined(STM8S207) || defined(STM8S007) ||defined(STM8S105) */
-#ifndef STM8S903
+#if !defined(STM8S903) || !defined(STM8AF622x)
  #include "stm8s_tim4.h"
-#endif /* STM8S903 */
-#ifdef STM8S903
+#endif /* (STM8S903) || (STM8AF622x) */
+#if defined(STM8S903) || defined(STM8AF622x)
  #include "stm8s_tim5.h"
  #include "stm8s_tim6.h"
-#endif /* STM8S903 */
+#endif  /* (STM8S903) || (STM8AF622x) */
 #if defined(STM8S208) ||defined(STM8S207) || defined(STM8S007) ||defined(STM8S103) ||\
     defined(STM8S003) || defined(STM8S903) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
  #include "stm8s_uart1.h"
-#endif /* STM8S208 || STM8S207 || STM8S103 ||STM8S903 || STM8AF52Ax || STM8AF62Ax */
+#endif /* (STM8S208) || (STM8S207) || (STM8S103) || (STM8S903) || (STM8AF52Ax) || (STM8AF62Ax) */
 #if defined(STM8S105) || defined(STM8S005) ||  defined (STM8AF626x)
  #include "stm8s_uart2.h"
-#endif /* STM8S105 || STM8AF626x */
+#endif /* (STM8S105) || (STM8AF626x) */
 #if defined(STM8S208) ||defined(STM8S207) || defined(STM8S007) || defined (STM8AF52Ax) ||\
     defined (STM8AF62Ax)
  #include "stm8s_uart3.h"
 #endif /* STM8S208 || STM8S207 || STM8AF52Ax || STM8AF62Ax */
+#if defined(STM8AF622x)
+ #include "stm8s_uart4.h"
+#endif /* (STM8AF622x) */
 #include "stm8s_wwdg.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Uncomment the line below to expanse the "assert_param" macro in the
    Standard Peripheral Library drivers code */
-/* #define USE_FULL_ASSERT    (1) */
+#define USE_FULL_ASSERT    (1)
 
 /* Exported macro ------------------------------------------------------------*/
 #ifdef  USE_FULL_ASSERT
@@ -103,4 +112,5 @@ void assert_failed(uint8_t* file, uint32_t line);
 
 #endif /* __STM8S_CONF_H */
 
-/******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
