@@ -2776,7 +2776,7 @@ CFG_TypeDef;
 
 #ifdef _SDCC_
   #define INTERRUPT_HANDLER(a,b) void a(void) __interrupt(b)
-  #define INTERRUPT_HANDLER_TRAP(a) void a(void) __interrupt(0)
+  #define INTERRUPT_HANDLER_TRAP(a) void a(void) __trap
 #endif /* _SDCC_ */
 
 #ifdef _IAR_
