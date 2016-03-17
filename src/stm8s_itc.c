@@ -47,6 +47,10 @@
   * @param  None
   * @retval CPU CC register value
   */
+#ifdef _SDCC_
+#pragma save
+#pragma disable_warning 59
+#endif // _SDCC_
 uint8_t ITC_GetCPUCC(void)
 {
 #ifdef _COSMIC_
@@ -63,6 +67,9 @@ uint8_t ITC_GetCPUCC(void)
   asm("pop a"); /* Ignore compiler warning, the returned value is in A register */
 #endif /* _COSMIC_*/
 }
+#ifdef _SDCC_
+#pragma restore
+#endif // _SDCC_
 
 
 /**
