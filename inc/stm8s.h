@@ -84,7 +84,7 @@
  #define _RAISONANCE_
 #elif defined(__ICCSTM8__)
  #define _IAR_
-#elif defined(SDCC)
+#elif defined(SDCC) || defined(__SDCC)
  #define _SDCC_
 #else
  #error "Unsupported Compiler!"          /* Compiler defines not found */
