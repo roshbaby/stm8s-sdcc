@@ -45,7 +45,7 @@
   * @{
   */
 
-CONST uint8_t HSIDivFactor[4] = {1, 2, 4, 8}; /*!< Holds the different HSI Divider factors */
+CONST uint8_t HSIDivExp[4] = {0, 1, 2, 3}; /*!< Holds the HSI Divider exponents */
 CONST uint8_t CLKPrescTable[8] = {1, 2, 4, 8, 10, 16, 20, 40}; /*!< Holds the different CLK prescaler values */
 
 /**
@@ -570,7 +570,7 @@ uint32_t CLK_GetClockFreq(void)
 {
   uint32_t clockfrequency = 0;
   CLK_Source_TypeDef clocksource = CLK_SOURCE_HSI;
-  uint8_t tmp = 0, presc = 0;
+  uint8_t tmp = 0;
   
   /* Get CLK source. */
   clocksource = (CLK_Source_TypeDef)CLK->CMSR;
@@ -579,8 +579,7 @@ uint32_t CLK_GetClockFreq(void)
   {
     tmp = (uint8_t)(CLK->CKDIVR & CLK_CKDIVR_HSIDIV);
     tmp = (uint8_t)(tmp >> 3);
-    presc = HSIDivFactor[tmp];
-    clockfrequency = HSI_VALUE / presc;
+    clockfrequency = HSI_VALUE >> HSIDivExp[tmp];
   }
   else if ( clocksource == CLK_SOURCE_LSI)
   {
