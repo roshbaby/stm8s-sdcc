@@ -188,7 +188,17 @@ void I2C_Init(uint32_t OutputClockFrequencyHz, uint16_t OwnAddress,
   I2C_AcknowledgeConfig(Ack);
 
   /*--------------------------- I2C OAR Configuration ------------------------*/
-  I2C->OARL = (uint8_t)(OwnAddress);
+  /* 
+    Owner address in the 7bit mode shold be move to the left on 1 bit 
+    
+    from datasheet:
+     Bits 7:1 ADD[7:1] Interface address
+      bits 7:1 of address
+     Bit 0 ADD[0] Interface address
+      7-bit addressing mode: donâ€™t care
+      10-bit addressing mode: bit 0 of address
+  */
+  I2C->OARL = (uint8_t)(AddMode == I2C_ADDMODE_7BIT ? (OwnAddress<<1) : OwnAddress);
   I2C->OARH = (uint8_t)((uint8_t)(AddMode | I2C_OARH_ADDCONF) |
                    (uint8_t)((OwnAddress & (uint16_t)0x0300) >> (uint8_t)7));
 }
@@ -671,8 +681,8 @@ I2C_Event_TypeDef I2C_GetLastEvent(void)
   *     @arg I2C_FLAG_STOPDETECTION: Stop detection flag (Slave mode)
   *     @arg I2C_FLAG_HEADERSENT: 10-bit header sent flag (Master mode)
   *     @arg I2C_FLAG_TRANSFERFINISHED: Byte transfer finished flag
-  *     @arg I2C_FLAG_ADDRESSSENTMATCHED: Address sent flag (Master mode) “ADSL”
-  *   Address matched flag (Slave mode)”ENDAD”
+  *     @arg I2C_FLAG_ADDRESSSENTMATCHED: Address sent flag (Master mode) Â“ADSLÂ”
+  *   Address matched flag (Slave mode)Â”ENDADÂ”
   *     @arg I2C_FLAG_STARTDETECTION: Start bit flag (Master mode)
   * @retval The new state of I2C_FLAG (SET or RESET).
   */
@@ -782,8 +792,8 @@ void I2C_ClearFlag(I2C_Flag_TypeDef I2C_FLAG)
   *               - I2C_ITPENDINGBIT_STOPDETECTION: Stop detection flag (Slave mode)
   *               - I2C_ITPENDINGBIT_HEADERSENT: 10-bit header sent flag (Master mode)
   *               - I2C_ITPENDINGBIT_TRANSFERFINISHED: Byte transfer finished flag
-  *               - I2C_ITPENDINGBIT_ADDRESSSENTMATCHED: Address sent flag (Master mode) “ADSL”
-  *                              Address matched flag (Slave mode)“ENDAD”
+  *               - I2C_ITPENDINGBIT_ADDRESSSENTMATCHED: Address sent flag (Master mode) Â“ADSLÂ”
+  *                              Address matched flag (Slave mode)Â“ENDADÂ”
   *               - I2C_ITPENDINGBIT_STARTDETECTION: Start bit flag (Master mode)
   * @retval The new state of I2C_ITPendingBit
   *   This parameter can be any of the @ref ITStatus enumeration.
