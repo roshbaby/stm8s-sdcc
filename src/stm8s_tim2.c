@@ -81,57 +81,6 @@ void TIM2_DeInit(void)
 }
 
 /**
-  * @brief  Initializes the TIM2 Time Base Unit according to the specified parameters.
-  * @param    TIM2_Prescaler specifies the Prescaler from TIM2_Prescaler_TypeDef.
-  * @param    TIM2_Period specifies the Period value.
-  * @retval None
-  */
-void TIM2_TimeBaseInit( TIM2_Prescaler_TypeDef TIM2_Prescaler,
-                        uint16_t TIM2_Period)
-{
-  /* Set the Prescaler value */
-  TIM2->PSCR = (uint8_t)(TIM2_Prescaler);
-  /* Set the Autoreload value */
-  TIM2->ARRH = (uint8_t)(TIM2_Period >> 8);
-  TIM2->ARRL = (uint8_t)(TIM2_Period);
-}
-
-
-/**
-  * @brief  Initializes the TIM2 Channel1 according to the specified parameters.
-  * @param   TIM2_OCMode specifies the Output Compare mode  from @ref TIM2_OCMode_TypeDef.
-  * @param   TIM2_OutputState specifies the Output State  from @ref TIM2_OutputState_TypeDef.
-  * @param   TIM2_Pulse specifies the Pulse width  value.
-  * @param   TIM2_OCPolarity specifies the Output Compare Polarity  from @ref TIM2_OCPolarity_TypeDef.
-  * @retval None
-  */
-void TIM2_OC1Init(TIM2_OCMode_TypeDef TIM2_OCMode,
-                  TIM2_OutputState_TypeDef TIM2_OutputState,
-                  uint16_t TIM2_Pulse,
-                  TIM2_OCPolarity_TypeDef TIM2_OCPolarity)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM2_OC_MODE_OK(TIM2_OCMode));
-  assert_param(IS_TIM2_OUTPUT_STATE_OK(TIM2_OutputState));
-  assert_param(IS_TIM2_OC_POLARITY_OK(TIM2_OCPolarity));
-
-  /* Disable the Channel 1: Reset the CCE Bit, Set the Output State , the Output Polarity */
-  TIM2->CCER1 &= (uint8_t)(~( TIM2_CCER1_CC1E | TIM2_CCER1_CC1P));
-  /* Set the Output State &  Set the Output Polarity  */
-  TIM2->CCER1 |= (uint8_t)((uint8_t)(TIM2_OutputState & TIM2_CCER1_CC1E ) |
-                           (uint8_t)(TIM2_OCPolarity & TIM2_CCER1_CC1P));
-
-  /* Reset the Output Compare Bits  & Set the Ouput Compare Mode */
-  TIM2->CCMR1 = (uint8_t)((uint8_t)(TIM2->CCMR1 & (uint8_t)(~TIM2_CCMR_OCM)) |
-                          (uint8_t)TIM2_OCMode);
-
-  /* Set the Pulse value */
-  TIM2->CCR1H = (uint8_t)(TIM2_Pulse >> 8);
-  TIM2->CCR1L = (uint8_t)(TIM2_Pulse);
-}
-
-
-/**
   * @brief  Initializes the TIM2 Channel2 according to the specified parameters.
   * @param   TIM2_OCMode specifies the Output Compare mode  from @ref TIM2_OCMode_TypeDef.
   * @param   TIM2_OutputState specifies the Output State  from @ref TIM2_OutputState_TypeDef.
@@ -331,59 +280,6 @@ void TIM2_PWMIConfig(TIM2_Channel_TypeDef TIM2_Channel,
 }
 
 /**
-  * @brief  Enables or disables the TIM2 peripheral.
-  * @param   NewState new state of the TIM2 peripheral. This parameter can
-  * be ENABLE or DISABLE.
-  * @retval None
-  */
-void TIM2_Cmd(FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-
-  /* set or Reset the CEN Bit */
-  if (NewState != DISABLE)
-  {
-    TIM2->CR1 |= (uint8_t)TIM2_CR1_CEN;
-  }
-  else
-  {
-    TIM2->CR1 &= (uint8_t)(~TIM2_CR1_CEN);
-  }
-}
-
-/**
-  * @brief  Enables or disables the specified TIM2 interrupts.
-  * @param   NewState new state of the TIM2 peripheral.
-  * This parameter can be: ENABLE or DISABLE.
-  * @param   TIM2_IT specifies the TIM2 interrupts sources to be enabled or disabled.
-  * This parameter can be any combination of the following values:
-  *                       - TIM2_IT_UPDATE: TIM2 update Interrupt source
-  *                       - TIM2_IT_CC1: TIM2 Capture Compare 1 Interrupt source
-  *                       - TIM2_IT_CC2: TIM2 Capture Compare 2 Interrupt source
-  *                       - TIM2_IT_CC3: TIM2 Capture Compare 3 Interrupt source
-  * @param   NewState new state of the TIM2 peripheral.
-  * @retval None
-  */
-void TIM2_ITConfig(TIM2_IT_TypeDef TIM2_IT, FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM2_IT_OK(TIM2_IT));
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-
-  if (NewState != DISABLE)
-  {
-    /* Enable the Interrupt sources */
-    TIM2->IER |= (uint8_t)TIM2_IT;
-  }
-  else
-  {
-    /* Disable the Interrupt sources */
-    TIM2->IER &= (uint8_t)(~TIM2_IT);
-  }
-}
-
-/**
   * @brief  Enables or Disables the TIM2 Update event.
   * @param   NewState new state of the TIM2 peripheral Preload register. This parameter can
   * be ENABLE or DISABLE.
@@ -550,50 +446,6 @@ void TIM2_ForcedOC3Config(TIM2_ForcedAction_TypeDef TIM2_ForcedAction)
   /* Reset the OCM Bits & Configure the Forced output Mode */
   TIM2->CCMR3  =  (uint8_t)((uint8_t)(TIM2->CCMR3 & (uint8_t)(~TIM2_CCMR_OCM))
                             | (uint8_t)TIM2_ForcedAction);
-}
-
-/**
-  * @brief  Enables or disables TIM2 peripheral Preload register on ARR.
-  * @param   NewState new state of the TIM2 peripheral Preload register.
-  * This parameter can be ENABLE or DISABLE.
-  * @retval None
-  */
-void TIM2_ARRPreloadConfig(FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-
-  /* Set or Reset the ARPE Bit */
-  if (NewState != DISABLE)
-  {
-    TIM2->CR1 |= (uint8_t)TIM2_CR1_ARPE;
-  }
-  else
-  {
-    TIM2->CR1 &= (uint8_t)(~TIM2_CR1_ARPE);
-  }
-}
-
-/**
-  * @brief  Enables or disables the TIM2 peripheral Preload Register on CCR1.
-  * @param   NewState new state of the Capture Compare Preload register.
-  * This parameter can be ENABLE or DISABLE.
-  * @retval None
-  */
-void TIM2_OC1PreloadConfig(FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-
-  /* Set or Reset the OC1PE Bit */
-  if (NewState != DISABLE)
-  {
-    TIM2->CCMR1 |= (uint8_t)TIM2_CCMR_OCxPE;
-  }
-  else
-  {
-    TIM2->CCMR1 &= (uint8_t)(~TIM2_CCMR_OCxPE);
-  }
 }
 
 /**
@@ -853,19 +705,6 @@ void TIM2_SetCounter(uint16_t Counter)
   /* Set the Counter Register value */
   TIM2->CNTRH = (uint8_t)(Counter >> 8);
   TIM2->CNTRL = (uint8_t)(Counter);
-}
-
-/**
-  * @brief  Sets the TIM2 Autoreload Register value.
-  * @param   Autoreload specifies the Autoreload register new value.
-  * This parameter is between 0x0000 and 0xFFFF.
-  * @retval None
-  */
-void TIM2_SetAutoreload(uint16_t Autoreload)
-{
-  /* Set the Autoreload Register value */
-  TIM2->ARRH = (uint8_t)(Autoreload >> 8);
-  TIM2->ARRL = (uint8_t)(Autoreload);
 }
 
 /**
@@ -1142,25 +981,6 @@ ITStatus TIM2_GetITStatus(TIM2_IT_TypeDef TIM2_IT)
     bitstatus = RESET;
   }
   return (ITStatus)(bitstatus);
-}
-
-/**
-  * @brief  Clears the TIM2's interrupt pending bits.
-  * @param   TIM2_IT specifies the pending bit to clear.
-  * This parameter can be one of the following values:
-  *                       - TIM2_IT_UPDATE: TIM2 update Interrupt source
-  *                       - TIM2_IT_CC1: TIM2 Capture Compare 1 Interrupt source
-  *                       - TIM2_IT_CC2: TIM2 Capture Compare 2 Interrupt source
-  *                       - TIM2_IT_CC3: TIM2 Capture Compare 3 Interrupt source
-  * @retval None.
-  */
-void TIM2_ClearITPendingBit(TIM2_IT_TypeDef TIM2_IT)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM2_IT_OK(TIM2_IT));
-
-  /* Clear the IT pending Bit */
-  TIM2->SR1 = (uint8_t)(~TIM2_IT);
 }
 
 /**

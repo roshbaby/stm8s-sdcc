@@ -102,7 +102,16 @@
 		<Unit filename="src/stm8s_clk.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/stm8s_clk_GetClockFreq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_clk_HSIPrescalerConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/stm8s_exti.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_exti_SetExtIntSensitivity.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/stm8s_flash.c">
@@ -111,13 +120,37 @@
 		<Unit filename="src/stm8s_gpio.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/stm8s_gpio_Init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_gpio_ReadInputData.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_gpio_WriteHigh.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_gpio_WriteLow.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/stm8s_i2c.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/stm8s_itc.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/stm8s_iwdg.c">
+		<Unit filename="src/stm8s_iwdg_Enable.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_iwdg_ReloadCounter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_iwdg_SetPrescaler.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_iwdg_SetReload.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_iwdg_WriteAccessCmd.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/stm8s_rst.c">
@@ -126,14 +159,53 @@
 		<Unit filename="src/stm8s_spi.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/stm8s_spi_Cmd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_spi_Init.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/stm8s_tim1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim1_ClearITPendingBit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim1_Cmd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim1_ITConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim1_TimeBaseInit.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2.c">
 			<Option compilerVar="CC" />
-			<Option target="STM8S105" />
-			<Option target="STM8S005" />
-			<Option target="STM8S103" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_ARRPreloadConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_ClearITPendingBit.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_Cmd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_ITConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_OC1Init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_OC1PreloadConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_SetAutoreload.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_tim2_TimeBaseInit.c">
+			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/stm8s_tim3.c">
 			<Option compilerVar="CC" />
@@ -159,6 +231,18 @@
 			<Option target="STM8S103" />
 			<Option target="STM8S903" />
 		</Unit>
+		<Unit filename="src/stm8s_uart1_Cmd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_uart1_ITConfig.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_uart1_Init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stm8s_uart1_ReceiveData8.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/stm8s_uart2.c">
 			<Option compilerVar="CC" />
 			<Option target="STM8S105" />
@@ -175,9 +259,6 @@
 		<Unit filename="src/stm8s_wwdg.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Extensions>
-			<code_completion />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
