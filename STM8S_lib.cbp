@@ -50,10 +50,25 @@
 					<Add option="-DSTM8S903" />
 				</Compiler>
 			</Target>
+			<Target title="STM8S103_D">
+				<Option output="lib/Debug/$(TARGET_NAME).lib" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug" />
+				<Option type="2" />
+				<Option compiler="sdcc" />
+				<Compiler>
+					<Add option="--out-fmt-elf" />
+					<Add option="--debug" />
+					<Add option="-DSTM8S103" />
+				</Compiler>
+			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="STM8S103_V" targets="STM8S103;STM8S103_D;" />
+		</VirtualTargets>
 		<Compiler>
-			<Add option="-mstm8" />
 			<Add option="--out-fmt-ihx" />
+			<Add option="-mstm8" />
 			<Add directory="inc" />
 		</Compiler>
 		<Unit filename="inc/stm8s.h" />
@@ -182,30 +197,66 @@
 		</Unit>
 		<Unit filename="src/stm8s_tim2.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_ARRPreloadConfig.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_ClearITPendingBit.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_Cmd.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_ITConfig.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_OC1Init.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_OC1PreloadConfig.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_SetAutoreload.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim2_TimeBaseInit.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim3.c">
 			<Option compilerVar="CC" />
@@ -217,6 +268,42 @@
 			<Option target="STM8S105" />
 			<Option target="STM8S005" />
 			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
+		</Unit>
+		<Unit filename="src/stm8s_tim4_ClearFlag.c">
+			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
+		</Unit>
+		<Unit filename="src/stm8s_tim4_ClearITPendingBit.c">
+			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
+		</Unit>
+		<Unit filename="src/stm8s_tim4_Cmd.c">
+			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
+		</Unit>
+		<Unit filename="src/stm8s_tim4_ITConfig.c">
+			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
+		</Unit>
+		<Unit filename="src/stm8s_tim4_TimeBaseInit.c">
+			<Option compilerVar="CC" />
+			<Option target="STM8S105" />
+			<Option target="STM8S005" />
+			<Option target="STM8S103" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_tim5.c">
 			<Option compilerVar="CC" />
@@ -230,18 +317,31 @@
 			<Option compilerVar="CC" />
 			<Option target="STM8S103" />
 			<Option target="STM8S903" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_uart1_Cmd.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S103" />
+			<Option target="STM8S903" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_uart1_ITConfig.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S103" />
+			<Option target="STM8S903" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_uart1_Init.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S103" />
+			<Option target="STM8S903" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_uart1_ReceiveData8.c">
 			<Option compilerVar="CC" />
+			<Option target="STM8S103" />
+			<Option target="STM8S903" />
+			<Option target="STM8S103_D" />
 		</Unit>
 		<Unit filename="src/stm8s_uart2.c">
 			<Option compilerVar="CC" />
