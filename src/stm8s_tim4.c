@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -57,72 +57,6 @@ void TIM4_DeInit(void)
 }
 
 /**
-  * @brief  Initializes the TIM4 Time Base Unit according to the specified parameters.
-  * @param    TIM4_Prescaler specifies the Prescaler from TIM4_Prescaler_TypeDef.
-  * @param    TIM4_Period specifies the Period value.
-  * @retval None
-  */
-void TIM4_TimeBaseInit(TIM4_Prescaler_TypeDef TIM4_Prescaler, uint8_t TIM4_Period)
-{
-  /* Check TIM4 prescaler value */
-  assert_param(IS_TIM4_PRESCALER_OK(TIM4_Prescaler));
-  /* Set the Prescaler value */
-  TIM4->PSCR = (uint8_t)(TIM4_Prescaler);
-  /* Set the Autoreload value */
-  TIM4->ARR = (uint8_t)(TIM4_Period);
-}
-
-/**
-  * @brief  Enables or disables the TIM4 peripheral.
-  * @param   NewState new state of the TIM4 peripheral. This parameter can
-  * be ENABLE or DISABLE.
-  * @retval None
-  */
-void TIM4_Cmd(FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
-  /* set or Reset the CEN Bit */
-  if (NewState != DISABLE)
-  {
-    TIM4->CR1 |= TIM4_CR1_CEN;
-  }
-  else
-  {
-    TIM4->CR1 &= (uint8_t)(~TIM4_CR1_CEN);
-  }
-}
-
-/**
-  * @brief  Enables or disables the specified TIM4 interrupts.
-  * @param   NewState new state of the TIM4 peripheral.
-  * This parameter can be: ENABLE or DISABLE.
-  * @param   TIM4_IT specifies the TIM4 interrupts sources to be enabled or disabled.
-  * This parameter can be any combination of the following values:
-  * - TIM4_IT_UPDATE: TIM4 update Interrupt source
-  * @param   NewState new state of the TIM4 peripheral.
-  * @retval None
-  */
-void TIM4_ITConfig(TIM4_IT_TypeDef TIM4_IT, FunctionalState NewState)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM4_IT_OK(TIM4_IT));
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
-  if (NewState != DISABLE)
-  {
-    /* Enable the Interrupt sources */
-    TIM4->IER |= (uint8_t)TIM4_IT;
-  }
-  else
-  {
-    /* Disable the Interrupt sources */
-    TIM4->IER &= (uint8_t)(~TIM4_IT);
-  }
-}
-
-/**
   * @brief  Enables or Disables the TIM4 Update event.
   * @param   NewState new state of the TIM4 peripheral Preload register. This parameter can
   * be ENABLE or DISABLE.
@@ -132,7 +66,7 @@ void TIM4_UpdateDisableConfig(FunctionalState NewState)
 {
   /* Check the parameters */
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
+
   /* Set or Reset the UDIS Bit */
   if (NewState != DISABLE)
   {
@@ -156,7 +90,7 @@ void TIM4_UpdateRequestConfig(TIM4_UpdateSource_TypeDef TIM4_UpdateSource)
 {
   /* Check the parameters */
   assert_param(IS_TIM4_UPDATE_SOURCE_OK(TIM4_UpdateSource));
-  
+
   /* Set or Reset the URS Bit */
   if (TIM4_UpdateSource != TIM4_UPDATESOURCE_GLOBAL)
   {
@@ -180,7 +114,7 @@ void TIM4_SelectOnePulseMode(TIM4_OPMode_TypeDef TIM4_OPMode)
 {
   /* Check the parameters */
   assert_param(IS_TIM4_OPM_MODE_OK(TIM4_OPMode));
-  
+
   /* Set or Reset the OPM Bit */
   if (TIM4_OPMode != TIM4_OPMODE_REPETITIVE)
   {
@@ -217,10 +151,10 @@ void TIM4_PrescalerConfig(TIM4_Prescaler_TypeDef Prescaler, TIM4_PSCReloadMode_T
   /* Check the parameters */
   assert_param(IS_TIM4_PRESCALER_RELOAD_OK(TIM4_PSCReloadMode));
   assert_param(IS_TIM4_PRESCALER_OK(Prescaler));
-  
+
   /* Set the Prescaler value */
   TIM4->PSCR = (uint8_t)Prescaler;
-  
+
   /* Set or reset the UG Bit */
   TIM4->EGR = (uint8_t)TIM4_PSCReloadMode;
 }
@@ -235,7 +169,7 @@ void TIM4_ARRPreloadConfig(FunctionalState NewState)
 {
   /* Check the parameters */
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
+
   /* Set or Reset the ARPE Bit */
   if (NewState != DISABLE)
   {
@@ -258,7 +192,7 @@ void TIM4_GenerateEvent(TIM4_EventSource_TypeDef TIM4_EventSource)
 {
   /* Check the parameters */
   assert_param(IS_TIM4_EVENT_SOURCE_OK(TIM4_EventSource));
-  
+
   /* Set the event sources */
   TIM4->EGR = (uint8_t)(TIM4_EventSource);
 }
@@ -319,10 +253,10 @@ TIM4_Prescaler_TypeDef TIM4_GetPrescaler(void)
 FlagStatus TIM4_GetFlagStatus(TIM4_FLAG_TypeDef TIM4_FLAG)
 {
   FlagStatus bitstatus = RESET;
-  
+
   /* Check the parameters */
   assert_param(IS_TIM4_GET_FLAG_OK(TIM4_FLAG));
-  
+
   if ((TIM4->SR1 & (uint8_t)TIM4_FLAG)  != 0)
   {
     bitstatus = SET;
@@ -335,22 +269,6 @@ FlagStatus TIM4_GetFlagStatus(TIM4_FLAG_TypeDef TIM4_FLAG)
 }
 
 /**
-  * @brief  Clears the TIM4’s pending flags.
-  * @param   TIM4_FLAG specifies the flag to clear.
-  * This parameter can be one of the following values:
-  *                       - TIM4_FLAG_UPDATE: TIM4 update Flag
-  * @retval None.
-  */
-void TIM4_ClearFlag(TIM4_FLAG_TypeDef TIM4_FLAG)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM4_GET_FLAG_OK(TIM4_FLAG));
-  
-  /* Clear the flags (rc_w0) clear this bit by writing 0. Writing ‘1’ has no effect*/
-  TIM4->SR1 = (uint8_t)(~TIM4_FLAG);
-}
-
-/**
   * @brief  Checks whether the TIM4 interrupt has occurred or not.
   * @param  TIM4_IT specifies the TIM4 interrupt source to check.
   * This parameter can be one of the following values:
@@ -360,16 +278,16 @@ void TIM4_ClearFlag(TIM4_FLAG_TypeDef TIM4_FLAG)
 ITStatus TIM4_GetITStatus(TIM4_IT_TypeDef TIM4_IT)
 {
   ITStatus bitstatus = RESET;
-  
+
   uint8_t itstatus = 0x0, itenable = 0x0;
-  
+
   /* Check the parameters */
   assert_param(IS_TIM4_IT_OK(TIM4_IT));
-  
+
   itstatus = (uint8_t)(TIM4->SR1 & (uint8_t)TIM4_IT);
-  
+
   itenable = (uint8_t)(TIM4->IER & (uint8_t)TIM4_IT);
-  
+
   if ((itstatus != (uint8_t)RESET ) && (itenable != (uint8_t)RESET ))
   {
     bitstatus = (ITStatus)SET;
@@ -382,28 +300,12 @@ ITStatus TIM4_GetITStatus(TIM4_IT_TypeDef TIM4_IT)
 }
 
 /**
-  * @brief Clears the TIM4's interrupt pending bits.
-  * @param TIM4_IT specifies the pending bit to clear.
-  * This parameter can be one of the following values:
-  *                       - TIM4_IT_UPDATE: TIM4 update Interrupt source
-  * @retval None.
-  */
-void TIM4_ClearITPendingBit(TIM4_IT_TypeDef TIM4_IT)
-{
-  /* Check the parameters */
-  assert_param(IS_TIM4_IT_OK(TIM4_IT));
-  
-  /* Clear the IT pending Bit */
-  TIM4->SR1 = (uint8_t)(~TIM4_IT);
-}
-
-/**
   * @}
   */
-  
+
   /**
   * @}
   */
-  
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -70,6 +70,9 @@
 #define FLASH_SET_BYTE      ((uint8_t)0xFF)
 #define OPERATION_TIMEOUT   ((uint16_t)0xFFFF)
 /* Private macro -------------------------------------------------------------*/
+#if PointerAttr == __far
+  uint32_t stm8s_flash_asm_addr;
+#endif // PointerAttr
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private Constants ---------------------------------------------------------*/
@@ -167,7 +170,16 @@ void FLASH_EraseByte(uint32_t Address)
   assert_param(IS_FLASH_ADDRESS_OK(Address));
 
   /* Erase byte */
+  #if PointerAttr == __far
+  //*(uint8_t*) (MemoryAddressCast)Address = FLASH_CLEAR_BYTE;
+  stm8s_flash_asm_addr = Address;
+  __asm
+    clr a
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+  __endasm;
+  #else
   *(PointerAttr uint8_t*) (MemoryAddressCast)Address = FLASH_CLEAR_BYTE;
+  #endif
 }
 
 /**
@@ -182,9 +194,21 @@ void FLASH_ProgramByte(uint32_t Address, uint8_t Data)
 {
   /* Check parameters */
   assert_param(IS_FLASH_ADDRESS_OK(Address));
+  #if PointerAttr == __far
+//  *(uint8_t*) (MemoryAddressCast)Address = Data;
+  stm8s_flash_asm_addr = Address;
+  Data; /* To prevent unused paramter warning */
+  __asm
+	ld	a, (8, sp)
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+  __endasm;
+  #else
   *(PointerAttr uint8_t*) (MemoryAddressCast)Address = Data;
+  #endif // PointerAttr
 }
 
+#pragma save
+#pragma disable_warning 59
 /**
   * @brief  Reads any byte from flash memory
   * @note   PointerAttr define is declared in the stm8s.h file to select if
@@ -198,8 +222,17 @@ uint8_t FLASH_ReadByte(uint32_t Address)
   assert_param(IS_FLASH_ADDRESS_OK(Address));
 
   /* Read byte */
+  #if PointerAttr == __far
+//  return(*(uint8_t *) (MemoryAddressCast)Address);
+  stm8s_flash_asm_addr = Address;
+  __asm
+	ldf	a, [_stm8s_flash_asm_addr+1].e
+  __endasm;
+  #else
   return(*(PointerAttr uint8_t *) (MemoryAddressCast)Address);
+  #endif // PointerAttr
 }
+#pragma restore
 
 /**
   * @brief  Programs one word (4 bytes) in program or data EEPROM memory
@@ -219,6 +252,44 @@ void FLASH_ProgramWord(uint32_t Address, uint32_t Data)
   FLASH->NCR2 &= (uint8_t)(~FLASH_NCR2_NWPRG);
 
   /* Write one byte - from lowest address*/
+  #if PointerAttr == __far
+  Data;
+  stm8s_flash_asm_addr = Address;
+  __asm
+;	src/stm8s_flash.c: 257: *((uint8_t*)(MemoryAddressCast)Address)       = *((uint8_t*)(&Data));
+	ld	a, (8, sp)
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+;	src/stm8s_flash.c: 259: *(((uint8_t*)(MemoryAddressCast)Address) + 1) = *((uint8_t*)(&Data)+1);
+	ldw	x, _stm8s_flash_asm_addr+2
+	ldw	y, _stm8s_flash_asm_addr
+	incw	x
+	jrne 00001$
+	incw y
+00001$:
+	ldw	_stm8s_flash_asm_addr+2, x
+	ldw	_stm8s_flash_asm_addr, y
+	ld	a, (9, sp)
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+;	src/stm8s_flash.c: 261: *(((uint8_t*)(MemoryAddressCast)Address) + 2) = *((uint8_t*)(&Data)+2);
+	incw	x
+	jrne 00002$
+	incw y
+00002$:
+	ldw	_stm8s_flash_asm_addr+2, x
+	ldw	_stm8s_flash_asm_addr, y
+	ld	a, (10, sp)
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+;	src/stm8s_flash.c: 263: *(((uint8_t*)(MemoryAddressCast)Address) + 3) = *((uint8_t*)(&Data)+3);
+	incw	x
+	jrne 00003$
+	incw y
+00003$:
+	ldw	_stm8s_flash_asm_addr+2, x
+	ldw	_stm8s_flash_asm_addr, y
+	ld	a, (11, sp)
+	ldf	[_stm8s_flash_asm_addr+1].e, a
+  __endasm;
+  #else
   *((PointerAttr uint8_t*)(MemoryAddressCast)Address)       = *((uint8_t*)(&Data));
   /* Write one byte*/
   *(((PointerAttr uint8_t*)(MemoryAddressCast)Address) + 1) = *((uint8_t*)(&Data)+1);
@@ -226,6 +297,7 @@ void FLASH_ProgramWord(uint32_t Address, uint32_t Data)
   *(((PointerAttr uint8_t*)(MemoryAddressCast)Address) + 2) = *((uint8_t*)(&Data)+2);
   /* Write one byte - from higher address*/
   *(((PointerAttr uint8_t*)(MemoryAddressCast)Address) + 3) = *((uint8_t*)(&Data)+3);
+  #endif // PointerAttr
 }
 
 /**
@@ -604,7 +676,11 @@ IN_RAM(void FLASH_EraseBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_MemT
   defined (STM8S903) || defined (STM8AF626x) || defined (STM8AF622x)
     uint32_t PointerAttr  *pwFlash;
 #elif defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined (STM8AF62Ax) || defined (STM8AF52Ax)
+  #if PointerAttr == __far
+  uint32_t pwFlash;
+  #else
   uint8_t PointerAttr  *pwFlash;
+  #endif // PointerAttr
 #endif
 
   /* Check parameters */
@@ -622,7 +698,11 @@ IN_RAM(void FLASH_EraseBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_MemT
 
   /* Point to the first block address */
 #if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined (STM8AF62Ax) || defined (STM8AF52Ax)
+  #if PointerAttr == __far
+  pwFlash = startaddress + ((uint32_t)BlockNum * FLASH_BLOCK_SIZE);
+  #else
   pwFlash = (PointerAttr uint8_t *)(MemoryAddressCast)(startaddress + ((uint32_t)BlockNum * FLASH_BLOCK_SIZE));
+  #endif // PointerAttr
 #elif defined(STM8S105) || defined(STM8S005) || defined(STM8S103) || defined(STM8S003) || \
   defined (STM8S903) || defined (STM8AF626x) || defined (STM8AF622x)
     pwFlash = (PointerAttr uint32_t *)(MemoryAddressCast)(startaddress + ((uint32_t)BlockNum * FLASH_BLOCK_SIZE));
@@ -637,10 +717,17 @@ IN_RAM(void FLASH_EraseBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_MemT
     *pwFlash = (uint32_t)0;
 #elif defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined (STM8AF62Ax) || \
   defined (STM8AF52Ax)
-    *pwFlash = (uint8_t)0;
+  #if PointerAttr == __far
+  FLASH_EraseByte(pwFlash);
+  FLASH_EraseByte(pwFlash + 1);
+  FLASH_EraseByte(pwFlash + 2);
+  FLASH_EraseByte(pwFlash + 3);
+  #else
+  *pwFlash = (uint8_t)0;
   *(pwFlash + 1) = (uint8_t)0;
   *(pwFlash + 2) = (uint8_t)0;
   *(pwFlash + 3) = (uint8_t)0;
+  #endif // PointerAttr
 #endif
 }
 
@@ -693,7 +780,11 @@ IN_RAM(void FLASH_ProgramBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_Me
   /* Copy data bytes from RAM to FLASH memory */
   for(Count = 0; Count < FLASH_BLOCK_SIZE; Count++)
   {
+  #if PointerAttr == __far
+  FLASH_ProgramByte(startaddress + Count, Buffer[Count]);
+  #else
     *((PointerAttr uint8_t*) (MemoryAddressCast)startaddress + Count) = ((uint8_t)(Buffer[Count]));
+  #endif // PointerAttr
   }
 }
 

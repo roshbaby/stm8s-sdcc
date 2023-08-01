@@ -16,8 +16,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -31,7 +31,7 @@
 /** @addtogroup STM8S_StdPeriph_Driver
   * @{
   */
-  
+
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -57,81 +57,6 @@ void SPI_DeInit(void)
 }
 
 /**
-  * @brief  Initializes the SPI according to the specified parameters.
-  * @param  FirstBit : This parameter can be any of the 
-  *         @ref SPI_FirstBit_TypeDef enumeration.
-  * @param  BaudRatePrescaler : This parameter can be any of the 
-  *         @ref SPI_BaudRatePrescaler_TypeDef enumeration.
-  * @param  Mode : This parameter can be any of the  
-  *         @ref SPI_Mode_TypeDef enumeration.
-  * @param  ClockPolarity : This parameter can be any of the 
-  *         @ref SPI_ClockPolarity_TypeDef enumeration.
-  * @param  ClockPhase : This parameter can be any of the 
-  *         @ref SPI_ClockPhase_TypeDef enumeration.
-  * @param  Data_Direction : This parameter can be any of the 
-  *         @ref SPI_DataDirection_TypeDef enumeration.
-  * @param  Slave_Management : This parameter can be any of the 
-  *         @ref SPI_NSS_TypeDef enumeration.
-  * @param  CRCPolynomial : Configures the CRC polynomial.
-  * @retval None
-  */
-void SPI_Init(SPI_FirstBit_TypeDef FirstBit, SPI_BaudRatePrescaler_TypeDef BaudRatePrescaler, SPI_Mode_TypeDef Mode, SPI_ClockPolarity_TypeDef ClockPolarity, SPI_ClockPhase_TypeDef ClockPhase, SPI_DataDirection_TypeDef Data_Direction, SPI_NSS_TypeDef Slave_Management, uint8_t CRCPolynomial)
-{
-  /* Check structure elements */
-  assert_param(IS_SPI_FIRSTBIT_OK(FirstBit));
-  assert_param(IS_SPI_BAUDRATE_PRESCALER_OK(BaudRatePrescaler));
-  assert_param(IS_SPI_MODE_OK(Mode));
-  assert_param(IS_SPI_POLARITY_OK(ClockPolarity));
-  assert_param(IS_SPI_PHASE_OK(ClockPhase));
-  assert_param(IS_SPI_DATA_DIRECTION_OK(Data_Direction));
-  assert_param(IS_SPI_SLAVEMANAGEMENT_OK(Slave_Management));
-  assert_param(IS_SPI_CRC_POLYNOMIAL_OK(CRCPolynomial));
-  
-  /* Frame Format, BaudRate, Clock Polarity and Phase configuration */
-  SPI->CR1 = (uint8_t)((uint8_t)((uint8_t)FirstBit | BaudRatePrescaler) |
-                       (uint8_t)((uint8_t)ClockPolarity | ClockPhase));
-  
-  /* Data direction configuration: BDM, BDOE and RXONLY bits */
-  SPI->CR2 = (uint8_t)((uint8_t)(Data_Direction) | (uint8_t)(Slave_Management));
-  
-  if (Mode == SPI_MODE_MASTER)
-  {
-    SPI->CR2 |= (uint8_t)SPI_CR2_SSI;
-  }
-  else
-  {
-    SPI->CR2 &= (uint8_t)~(SPI_CR2_SSI);
-  }
-  
-  /* Master/Slave mode configuration */
-  SPI->CR1 |= (uint8_t)(Mode);
-  
-  /* CRC configuration */
-  SPI->CRCPR = (uint8_t)CRCPolynomial;
-}
-
-/**
-  * @brief  Enables or disables the SPI peripheral.
-  * @param  NewState New state of the SPI peripheral.
-  *         This parameter can be: ENABLE or DISABLE
-  * @retval None
-  */
-void SPI_Cmd(FunctionalState NewState)
-{
-  /* Check function parameters */
-  assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
-  if (NewState != DISABLE)
-  {
-    SPI->CR1 |= SPI_CR1_SPE; /* Enable the SPI peripheral*/
-  }
-  else
-  {
-    SPI->CR1 &= (uint8_t)(~SPI_CR1_SPE); /* Disable the SPI peripheral*/
-  }
-}
-
-/**
   * @brief  Enables or disables the specified interrupts.
   * @param  SPI_IT Specifies the SPI interrupts sources to be enabled or disabled.
   * @param  NewState: The new state of the specified SPI interrupts.
@@ -144,10 +69,10 @@ void SPI_ITConfig(SPI_IT_TypeDef SPI_IT, FunctionalState NewState)
   /* Check function parameters */
   assert_param(IS_SPI_CONFIG_IT_OK(SPI_IT));
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
+
   /* Get the SPI IT index */
   itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)SPI_IT & (uint8_t)0x0F));
-  
+
   if (NewState != DISABLE)
   {
     SPI->ICR |= itpos; /* Enable interrupt*/
@@ -188,7 +113,7 @@ void SPI_NSSInternalSoftwareCmd(FunctionalState NewState)
 {
   /* Check function parameters */
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
+
   if (NewState != DISABLE)
   {
     SPI->CR2 |= SPI_CR2_SSI; /* Set NSS pin internally by software*/
@@ -219,7 +144,7 @@ void SPI_CalculateCRCCmd(FunctionalState NewState)
 {
   /* Check function parameters */
   assert_param(IS_FUNCTIONALSTATE_OK(NewState));
-  
+
   if (NewState != DISABLE)
   {
     SPI->CR2 |= SPI_CR2_CRCEN; /* Enable the CRC calculation*/
@@ -238,10 +163,10 @@ void SPI_CalculateCRCCmd(FunctionalState NewState)
 uint8_t SPI_GetCRC(SPI_CRC_TypeDef SPI_CRC)
 {
   uint8_t crcreg = 0;
-  
+
   /* Check function parameters */
   assert_param(IS_SPI_CRC_OK(SPI_CRC));
-  
+
   if (SPI_CRC != SPI_CRC_RX)
   {
     crcreg = SPI->TXCRCR;  /* Get the Tx CRC register*/
@@ -250,7 +175,7 @@ uint8_t SPI_GetCRC(SPI_CRC_TypeDef SPI_CRC)
   {
     crcreg = SPI->RXCRCR; /* Get the Rx CRC register*/
   }
-  
+
   /* Return the selected CRC register status*/
   return crcreg;
 }
@@ -265,7 +190,7 @@ void SPI_ResetCRC(void)
   /* Rx CRCR & Tx CRCR registers are reset when CRCEN (hardware calculation)
   bit in SPI_CR2 is written to 1 (enable) */
   SPI_CalculateCRCCmd(ENABLE);
-  
+
   /* Previous function disable the SPI */
   SPI_Cmd(ENABLE);
 }
@@ -289,7 +214,7 @@ void SPI_BiDirectionalLineConfig(SPI_Direction_TypeDef SPI_Direction)
 {
   /* Check function parameters */
   assert_param(IS_SPI_DIRECTION_OK(SPI_Direction));
-  
+
   if (SPI_Direction != SPI_DIRECTION_RX)
   {
     SPI->CR2 |= SPI_CR2_BDOE; /* Set the Tx only mode*/
@@ -313,7 +238,7 @@ FlagStatus SPI_GetFlagStatus(SPI_Flag_TypeDef SPI_FLAG)
   FlagStatus status = RESET;
   /* Check parameters */
   assert_param(IS_SPI_FLAGS_OK(SPI_FLAG));
-  
+
   /* Check the status of the specified SPI flag */
   if ((SPI->SR & (uint8_t)SPI_FLAG) != (uint8_t)RESET)
   {
@@ -323,7 +248,7 @@ FlagStatus SPI_GetFlagStatus(SPI_Flag_TypeDef SPI_FLAG)
   {
     status = RESET; /* SPI_FLAG is reset*/
   }
-  
+
   /* Return the SPI_FLAG status */
   return status;
 }
@@ -373,7 +298,7 @@ ITStatus SPI_GetITStatus(SPI_IT_TypeDef SPI_IT)
   assert_param(IS_SPI_GET_IT_OK(SPI_IT));
   /* Get the SPI IT index */
   itpos = (uint8_t)((uint8_t)1 << ((uint8_t)SPI_IT & (uint8_t)0x0F));
-  
+
   /* Get the SPI IT mask */
   itmask1 = (uint8_t)((uint8_t)SPI_IT >> (uint8_t)4);
   /* Set the IT mask */
@@ -413,23 +338,23 @@ void SPI_ClearITPendingBit(SPI_IT_TypeDef SPI_IT)
 {
   uint8_t itpos = 0;
   assert_param(IS_SPI_CLEAR_IT_OK(SPI_IT));
-  
+
   /* Clear  SPI_IT_CRCERR or SPI_IT_WKUP interrupt pending bits */
-  
+
   /* Get the SPI pending bit index */
   itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)(SPI_IT & (uint8_t)0xF0) >> 4));
   /* Clear the pending bit */
   SPI->SR = (uint8_t)(~itpos);
-  
+
 }
 
 /**
   * @}
   */
-  
+
 /**
   * @}
   */
-  
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
